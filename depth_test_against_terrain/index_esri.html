@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>IntegratedMesh3DTilesLayer | Sample | ArcGIS Maps SDK for JavaScript 4.29</title>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.29/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+
+    <script>
+      require([
+        "esri/WebScene",
+        "esri/views/SceneView",
+        "esri/layers/IntegratedMesh3DTilesLayer",
+        "esri/widgets/Expand",
+        "esri/widgets/LayerList",
+        "esri/widgets/Legend"
+      ], (WebScene, SceneView, IntegratedMesh3DTilesLayer, Expand, LayerList, Legend) => {
+        /*************************************
+         * Load webscene with layer showing
+         * building energy ratings
+         *************************************/
+        const webscene = new WebScene(
+             {
+         portalItem: {
+            id: "5b177c2579bf45159bb91e2a13b4218b"
+          }
+     });
+
+
+
+        /*************************************
+         * Create IntegratedMesh3DTilesLayer layer
+         * and add it to the webscene
+         ***********************************/
+        const layer = new IntegratedMesh3DTilesLayer({
+          url: "https://geodan.github.io/pg2b3dm/sample_data/3dbag/sibbe/1.0/tileset.json",
+          title: "Sibbe"
+        });
+
+        webscene.add(layer);
+        const view = new SceneView({
+            camera: {
+          position: [ 5.827152, 50.843152, 400],
+          tilt: 80,
+          fov: 30
+        },
+          container: "viewDiv",
+          map: webscene,
+          lighting: {
+            directShadowsEnabled: true
+          }
+        });
+
+        const expandLegend = new Expand({
+          content: new Legend({
+            view: view
+          }),
+          expanded: true,
+          expandTooltip: "Expand Legend",
+          group: "top-right",
+          view: view
+        });
+
+        const expandLayerList = new Expand({
+          content: new LayerList({
+            view: view
+          }),
+          expandTooltip: "Expand Layer List",
+          group: "top-right",
+          view: view
+        });
+
+        view.ui.add([expandLegend, expandLayerList], "top-right");
+
+      });
+    </script>
+  </head>
+
+  <body>
+    <div id="viewDiv"></div>
+  </body>
+</html>
